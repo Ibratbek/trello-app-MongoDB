@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+
+<body>
+
+    <div class="container">
+        <h4 class="text-center mt-3">Task Management App | <span>
+                <%= user[0].name %>
+            </span></h4>
+        <div class="box">
+            <form action="/search" method="POST">
+                <input type="text" name="searchText" class="m-3" style="width:200px">
+                <input type="text" name="userId" hidden value=<%=user[0]._id %>>
+                <button type="submit" class="btn-light">Search</button>
+                <a href="/dashboard/<%= user[0]._id %>">Home</a>
+            </form>
+            <div class=" row">
+                <% columns.forEach(column=> { %>
+                    <div class="col-3 " >
+                        <div class="card-header bg-primary text-white ">
+                            <%= column.title %>
+                        </div>
+                        <% cards.forEach(card=> { %>
+                            <% if(column._id==card.id){ %>
+                                <p class="card-title">
+                                <form action="/dashboard/<%=user[0]._id %>/cards/<%= card._id %>" method="POST"
+                                    style="margin: 0; padding: 0;">
+                                    <input type="text" hidden name="userId" value=<%=user[0]._id %>>
+                                    <button type="submit" class="btn-warning" style="margin-left: 0;font-size: 14px;">*
+                                        <%= card.content %>
+                                    </button>
+                                </form>
+                                <h5>
+
+                                </h5>
+                                <div class="updelete" style="display: flex; gap: 10px;">
+                                    <form action="/edit-card/<%= card._id %>" method="POST"
+                                        style="margin: 0; padding: 0;">
+                                        <input type="text" hidden name="userId" value=<%=user[0]._id %>>
+                                        <button type="submit" class="btn-black"
+                                            style="margin-left: 0;font-size: 14px;">Edit</button>
+                                    </form>
+                                    <form action="/delete-card/<%= card._id %>" method="POST"
+                                        style="margin: 0; padding: 0;">
+                                        <input type="text" hidden name="userId" value=<%=user[0]._id %>>
+                                        <button type="submit" class="btn-black"
+                                            style="margin-left: 0; font-size: 14px;">Delete</button>
+                                    </form>
+                                </div>
+                                <p>Assigness: <%= card.users %>
+                                </p>
+                                </p>
+                                <% } %>
+                                    <% }) %>
+
+                                        <form action="/add-card" method="POST" class="mt-2">
+                                            <input type="text" name="cardContent" class="form-group"
+                                                style="width: 200px;" placeholder="Add task">
+                                            <button type="submit" class=" btn-light"">+</button>
+              <input type=" text" hidden name="columnId" value=<%=column._id %> >
+                                                <input type="text" hidden name="userId" value=<%=user[0]._id %>>
+                                        </form>
+                                        <br>
+                    </div>
+                    <% }) %>
+                        <div class=" col-3">
+                            <form action="/add-column" method="POST" class="m-2">
+                                <input type="text" name="columnName" class="form-group"
+                                    style="width: 200px; margin-right: 0; margin-left: 5px;" placeholder="Add Column">
+                                <input type="text" hidden name="userId" value=<%=user[0]._id %>>
+                                <button type="submit" class="btn-success" style="margin-left: 0;">+</button>
+                            </form>
+                        </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
